@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2026 USTA 8.0 Mixed Nationals Simulation</title>
+<style>
+:root{--ink:#17251f;--muted:#64736c;--line:#dce5df;--bg:#f4f7f4;--card:#fff;--green:#168653;--red:#d4645d;--softgreen:#e5f4eb;--softred:#fbe9e6;--accent:#153f32;--gold:#cba64b;--man:#2563eb;--woman:#c026a6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}
+header{background:linear-gradient(115deg,#103d31,#23674b);color:#fff;padding:34px max(24px,calc((100vw - 1280px)/2)) 28px}
+header h1{margin:0 0 8px;font-size:clamp(24px,4vw,36px);line-height:1.1}header p{color:#d5e8dc;margin:0;max-width:960px}
+.wrap{max-width:1280px;margin:auto;padding:24px}
+.banner{background:#fff6e0;border:1px solid #e9d59a;color:#7a5c14;border-radius:12px;padding:12px 16px;margin:0 0 18px;font-size:13.5px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 22px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 6px #1c38260a;padding:16px 18px}
+.stat strong{display:block;font-size:22px;color:var(--accent)}.stat span{color:var(--muted);font-size:13px}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.twocol .panel{margin-bottom:0}
+.twocol .sub{min-height:34px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:10px 0 16px}
+.tab{appearance:none;background:none;border:0;padding:11px 15px;color:var(--muted);font-weight:650;cursor:pointer;border-bottom:3px solid transparent}
+.tab.active{color:var(--accent);border-color:var(--green)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 2px 6px #1c38260a;padding:20px;margin-bottom:18px}
+.tabpane{display:none}.tabpane.active{display:block}.panel h2{margin:0 0 4px;font-size:21px}.sub{color:var(--muted);font-size:13px;margin:0 0 15px}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{padding:10px 11px;border-bottom:1px solid #e7eee9;text-align:right;white-space:nowrap}
+th{position:sticky;top:0;background:#f2f6f3;color:#52625a;font-size:12px;text-transform:uppercase;letter-spacing:.04em;z-index:1}
+td:first-child,th:first-child,td:nth-child(2),th:nth-child(2){text-align:left}
+tbody tr:hover{background:#f8fbf8}.rank{font-weight:750;color:#53635b}
+.pill{display:inline-block;border-radius:99px;padding:3px 8px;font-size:12px;font-weight:700}.pill.good{background:var(--softgreen);color:#176c46}
+.barcell{min-width:140px}.bar{height:9px;background:#edf1ed;border-radius:10px;overflow:hidden}.bar i{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,#8bd0a6,#218c59)}
+.teamgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.team-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.team-card h3{font-size:16px;margin:0 0 2px}.team-card .region{font-size:12px;color:var(--muted);margin-bottom:10px}
+.ln{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:8px 0;border-top:1px solid #edf1ee;align-items:center}
+.ln b{font-size:12px;color:var(--green)}
+.pair{display:flex;flex-direction:column;gap:2px}.pair .p{font-size:13px}.pair .p .g{font-weight:700;font-size:10px;padding:0 5px;border-radius:99px;margin-right:6px;color:#fff;vertical-align:1px}
+.g.m{background:var(--man)}.g.w{background:var(--woman)}.pair .meta{color:var(--muted);font-size:11px}
+.matrix{min-width:980px}.matrix th:first-child,.matrix td:first-child{text-align:left;position:sticky;left:0;background:#f2f6f3;z-index:2}
+.matrix td{min-width:52px;text-align:center;padding:8px 6px;font-size:12px}
+.foot{font-size:12px;color:var(--muted);padding:4px 2px 24px}
+.schedmeta{font-size:12.5px;color:var(--muted)}
+.gridbar{display:flex;align-items:center;gap:10px;margin:0 0 14px;flex-wrap:wrap}
+.gridbar label{font-size:13px;font-weight:650;color:var(--accent)}
+.gridbar select{font:inherit;font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink)}
+.gridwrap{overflow:auto;max-height:78vh;border:1px solid var(--line);border-radius:12px}
+#matchGrid{border-collapse:separate;border-spacing:0;width:max-content;min-width:100%}
+#matchGrid th,#matchGrid td{border-bottom:1px solid #eef2ef;border-right:1px solid #eef2ef;vertical-align:top}
+#matchGrid th{position:sticky;top:0;background:#eef3ef;color:#52625a;font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:9px 12px;text-align:left;z-index:5;border-bottom:1px solid var(--line)}
+/* frozen left columns: section (0) + own lineup */
+#matchGrid th.c-sec,#matchGrid td.c-sec{position:sticky;left:0;z-index:4;min-width:118px;max-width:118px;background:var(--card)}
+#matchGrid th.c-lu,#matchGrid td.c-lu{position:sticky;left:118px;z-index:4;min-width:282px;max-width:282px;background:#fafcfa;overflow:hidden}
+#matchGrid th.c-sec,#matchGrid th.c-lu{z-index:6}
+#matchGrid td{padding:7px}
+#matchGrid td.c-sec{font-weight:700;font-size:13px;box-shadow:1px 0 0 var(--line)}
+#matchGrid td.c-sec .rk{color:var(--muted);font-weight:600;margin-right:5px}
+#matchGrid td.c-sec small{display:block;color:var(--muted);font-weight:500;font-size:11px;margin-top:3px}
+#matchGrid td.c-lu{box-shadow:1px 0 0 var(--line)}
+.luwrap{overflow-x:auto}
+.lu{font-size:11.5px;white-space:nowrap;line-height:1.6;text-align:left}
+.lu b{color:var(--accent);margin-right:4px;font-size:10px}
+.lu .m{color:var(--man)}.lu .w{color:var(--woman)}.lu .sep{color:#aeb8b1}
+.lu .u{color:var(--muted);font-size:10px;font-weight:600}
+.mcell.empty{color:#c3ccc6;text-align:center;font-size:18px;vertical-align:middle}
+.mbox{width:290px;border-radius:9px;overflow:hidden;border:1px solid var(--line)}
+.mbox.fav{border-left:4px solid var(--green)}.mbox.dog{border-left:4px solid var(--red)}
+.opphd{font-size:11px;color:var(--muted);padding:5px 8px;background:#f6f8f6;border-bottom:1px solid var(--line);text-align:left}
+.opphd b{color:var(--ink);font-weight:700}
+.oppwrap{overflow-x:auto}
+.lnrow{display:grid;grid-template-columns:20px 54px max-content;align-items:center;gap:7px;padding:3px 8px;font-size:11.5px;white-space:nowrap;text-align:left}
+.lnrow>b{color:var(--accent);font-size:10px}
+.lbar{position:relative;height:9px;border-radius:6px;background:#e7ece8;overflow:hidden}
+.lbar i{position:absolute;left:0;top:0;height:100%}
+.lbar .pc{position:absolute;right:2px;top:-1px;font-size:8.5px;color:#3a463f;font-weight:700;line-height:11px}
+.lnames{text-align:left}.lnames .m{color:var(--man)}.lnames .w{color:var(--woman)}.lnames .sep{color:#aeb8b1}
+/* NTRP vs UTR, color-coded so the two numbers read apart */
+.ntrp{color:#9a7b22;font-weight:700;font-size:10px}
+.utr{color:#0f766e;font-weight:700;font-size:10.5px}
+.ratsl{color:#c3ccc6;font-size:10px;margin:0 1px}
+.mresult{display:flex;border-top:1px solid var(--line)}
+.mexp,.mact{flex:1;padding:6px 8px;font-size:11.5px}
+.mexp{border-right:1px dashed var(--line)}
+.mexp .lbl,.mact .lbl{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:1px}
+.mexp.win{background:var(--softgreen)}.mexp.win .v{color:#176c46;font-weight:700}
+.mexp.loss{background:var(--softred)}.mexp.loss .v{color:#b4463f;font-weight:700}
+.mexp.pickem .v{color:#9a7b22;font-weight:700}
+.mact .v{font-weight:700}.mact.win .v{color:#176c46}.mact.loss .v{color:#b4463f}
+.mact.pending .v{color:#b7c0ba;font-weight:600;font-style:italic}
+.mact .flag{font-size:9px;font-weight:700;color:var(--red);margin-left:4px}
+@media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}.teamgrid{grid-template-columns:1fr}.twocol{grid-template-columns:1fr}.wrap{padding:14px}.panel{padding:14px}}
+</style></head><body>
+<header><h1>2026 USTA 8.0 Mixed Nationals — Simulation</h1>
+<p>Mixed doubles, combined 8.0: every team match is <b>3 mixed-doubles lines</b> (one man + one woman per line,
+their NTRP ratings summing to 8.0 or less), and the tie goes to the side that wins <b>2 of 3</b>. 16 sections
+(no Caribbean), group stage then a top-4 bracket (1v4, 2v3, final) — the same engine as the 4.0 men's board.</p></header>
+<div class="wrap">
+<div id="banner"></div>
+<div class="tabs">
+  <button class="tab active" data-tab="power">Power rankings</button>
+  <button class="tab" data-tab="matches">Matches</button>
+  <button class="tab" data-tab="lineups">Lineups</button>
+  <button class="tab" data-tab="matrix">Matchup matrix</button>
+</div>
+
+<section class="tabpane active" id="power">
+<div class="twocol">
+  <div class="panel" id="schedPanel">
+    <h2>Projected standings</h2>
+    <p class="sub">Each team's <b>real 4 matchups</b>: exp. wins /4, SOS (opponent strength), and
+    qualify/title from a <span id="gd2"></span>-trial sim. <b>&Delta;</b> = shift vs power rank.</p>
+    <div class="tablewrap"><table id="schedTable"><thead><tr>
+    <th>#</th><th>Section</th><th>Exp /4</th><th>SOS</th>
+    <th>Qualify</th><th>Title</th><th>&Delta;</th></tr></thead><tbody></tbody></table></div>
+  </div>
+  <div class="panel">
+    <h2>Power rankings</h2>
+    <p class="sub">Pure strength vs <b>all 15</b> other sections (sum of head-to-head win probs).
+    <b>Favored</b> = how many of the 15 it's likelier than not to beat. Draw-independent.</p>
+    <div class="tablewrap"><table id="powerTable"><thead><tr>
+    <th>#</th><th>Section</th><th>Exp. wins / <span id="nopp"></span></th><th>Favored</th>
+    <th>Strength</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</div></section>
+
+<section class="tabpane" id="matches"><div class="panel">
+  <h2>Match grid &mdash; predicted vs actual</h2>
+  <p class="sub">One row per section. The frozen <b>Top lineup</b> column is that team's own
+  <b>D1&ndash;D3</b> (same every match); each match box shows the <b>opponent's</b> D1&ndash;D3
+  with a bar per line (how likely <em>your</em> Dk wins), plus <b>Expected</b>
+  (<span style="color:var(--green);font-weight:700">green</span> favored /
+  <span style="color:var(--red);font-weight:700">red</span> underdog) over <b>Actual</b>
+  (fill <code>data/results_8_0.json</code>, re-run). UTR shown next to each name. Scroll right &amp; down.</p>
+  <div class="gridbar"><span id="schedMeta" class="schedmeta"></span></div>
+  <div class="gridwrap"><table id="matchGrid"></table></div>
+  <p class="sub" style="margin:12px 0 0">
+    <b>How D1&ndash;D3 are set:</b> among all man+woman pairs whose combined NTRP is &le; 8.0, each pair's
+    strength is the <b>average of the two players' z-scores</b> (z = doubles UTR standardized:
+    <i>(UTR &minus; league avg) &divide; league std</i>). The strongest pair is <b>D1</b>, the next strongest
+    (no player reused) is <b>D2</b>, then <b>D3</b> &mdash; so it's the average rating, not the UTR sum.
+    Each line bar = probability your D<i>k</i> beats their D<i>k</i>, from the z-score gap.</p>
+</div></section>
+
+<section class="tabpane" id="lineups"><div class="panel">
+  <h2>Mixed lineups</h2>
+  <p class="sub">Each section's three mixed-doubles lines, strongest first. A line is one
+  <span style="color:var(--man);font-weight:700">man</span> + one
+  <span style="color:var(--woman);font-weight:700">woman</span> with NTRP summing to &le; 8.0.
+  Line strength = average of the pair's z-scores.</p>
+  <div class="teamgrid" id="lineupGrid"></div>
+</div></section>
+
+<section class="tabpane" id="matrix"><div class="panel">
+  <h2>Matchup matrix</h2>
+  <p class="sub">Row team's probability of winning the tie (2 of 3 lines) vs each column team.</p>
+  <div class="tablewrap"><table class="matrix" id="matrixTable"></table></div>
+</div></section>
+
+<div class="foot" id="foot"></div>
+</div>
+<script id="payload" type="application/json">{"division":"8.0 Mixed","sections":["Eastern","Florida","Hawaii","Intermountain","Mid Atlantic","Middle States","Midwest","MOValley","New England","Norcal","Northern","PNW","Socal","Southern","Southwest","Texas"],"nTeams":16,"nOpp":15,"lines":3,"win":2,"maxCombined":8.0,"groupDraws":10000,"seed":20261102,"placeholder":false,"disp":{"Socal":"SoCal","Norcal":"NorCal","Mid Atlantic":"Mid-Atlantic"},"teams":[{"section":"Socal","lineup":{"lines":[{"line":"D1","rating":1.0863045,"man":{"name":"Anthony Lim","ntrp":4.0,"z":0.790089,"utr":7.04,"url":null},"woman":{"name":"Lauren Bee","ntrp":4.0,"z":1.38252,"utr":7.94,"url":null}},{"line":"D2","rating":0.6781855,"man":{"name":"AUSTIN HARVILL","ntrp":4.5,"z":2.146098,"utr":9.1,"url":null},"woman":{"name":"Kaitlin Mogentale","ntrp":3.5,"z":-0.789727,"utr":4.64,"url":null}},{"line":"D3","rating":0.520204,"man":{"name":"Philman Tjong","ntrp":3.5,"z":0.395135,"utr":6.44,"url":null},"woman":{"name":"Megan Bee","ntrp":4.5,"z":0.645273,"utr":6.82,"url":null}}]},"expected_wins":10.961,"expected_win_pct":0.730733,"favored_matchups":15,"control_match_win_pct":0.8695,"control_expected_courts":2.311,"group_avg_wins":2.9268,"group_qualify":0.6658,"seed1":0.2629,"seed2":0.1796,"seed3":0.1385,"seed4":0.0848,"semis":0.6658,"final":0.438,"champion":0.2667,"rank":1,"sched_exp_wins":2.7801,"sched_nmatch":4,"sched_sos":7.8929,"sched_opps":["New England","Mid Atlantic","Eastern","Intermountain"],"sched_qualify":0.5948,"sched_champion":0.2464},{"section":"Eastern","lineup":{"lines":[{"line":"D1","rating":0.9414885,"man":{"name":"Teppei Suzuki","ntrp":4.5,"z":1.718231,"utr":8.45,"url":null},"woman":{"name":"Brianna Yao","ntrp":3.5,"z":0.164746,"utr":6.09,"url":null}},{"line":"D2","rating":0.6617295,"man":{"name":"Gabriel Birman","ntrp":3.5,"z":0.414883,"utr":6.47,"url":null},"woman":{"name":"Nicole Kwok","ntrp":4.5,"z":0.908576,"utr":7.22,"url":null}},{"line":"D3","rating":0.635399,"man":{"name":"Lawrence Wang","ntrp":4.5,"z":1.672153,"utr":8.38,"url":null},"woman":{"name":"Lauren Yu","ntrp":3.5,"z":-0.401355,"utr":5.23,"url":null}}]},"expected_wins":10.8767,"expected_win_pct":0.725113,"favored_matchups":14,"control_match_win_pct":0.8669,"control_expected_courts":2.3101,"group_avg_wins":2.9234,"group_qualify":0.6562,"seed1":0.2487,"seed2":0.182,"seed3":0.1369,"seed4":0.0886,"semis":0.6562,"final":0.4293,"champion":0.2663,"rank":2,"sched_exp_wins":2.7567,"sched_nmatch":4,"sched_sos":7.7779,"sched_opps":["Northern","Hawaii","Socal","Florida"],"sched_qualify":0.5691,"sched_champion":0.231},{"section":"Norcal","lineup":{"lines":[{"line":"D1","rating":0.641982,"man":{"name":"Sharan Shodhan","ntrp":4.0,"z":1.514172,"utr":8.14,"url":null},"woman":{"name":"Amy Jiang","ntrp":4.0,"z":-0.230208,"utr":5.49,"url":null}},{"line":"D2","rating":0.520204,"man":{"name":"Daniel Luo","ntrp":4.5,"z":1.889378,"utr":8.71,"url":null},"woman":{"name":"Yvonne Lin","ntrp":3.5,"z":-0.84897,"utr":4.55,"url":null}},{"line":"D3","rating":0.493874,"man":{"name":"Cody Lin","ntrp":4.0,"z":1.454929,"utr":8.05,"url":null},"woman":{"name":"Abbey Moore","ntrp":4.0,"z":-0.467181,"utr":5.13,"url":null}}]},"expected_wins":9.2927,"expected_win_pct":0.619513,"favored_matchups":13,"control_match_win_pct":0.7957,"control_expected_courts":2.1274,"group_avg_wins":2.4683,"group_qualify":0.4314,"seed1":0.1036,"seed2":0.1171,"seed3":0.1146,"seed4":0.0961,"semis":0.4314,"final":0.223,"champion":0.106,"rank":3,"sched_exp_wins":2.7586,"sched_nmatch":4,"sched_sos":6.3331,"sched_opps":["Mid Atlantic","New England","Southwest","Midwest"],"sched_qualify":0.5682,"sched_champion":0.1346},{"section":"MOValley","lineup":{"lines":[{"line":"D1","rating":1.0927965,"man":{"name":"Michael Boyer","ntrp":4.5,"z":2.185593,"utr":9.16,"url":null},"woman":{"name":"Julia Heil","ntrp":3.5,"z":0.0,"utr":null,"url":null}},{"line":"D2","rating":0.3819705,"man":{"name":"Pedro Gonzalez","ntrp":4.5,"z":1.948621,"utr":8.8,"url":null},"woman":{"name":"Sarah Zinn-Burggraaf","ntrp":3.5,"z":-1.18468,"utr":4.04,"url":null}},{"line":"D3","rating":0.1351245,"man":{"name":"Justin Despotovich","ntrp":4.5,"z":1.652406,"utr":8.35,"url":null},"woman":{"name":"Amy Upright","ntrp":3.5,"z":-1.382157,"utr":3.74,"url":null}}]},"expected_wins":9.0117,"expected_win_pct":0.60078,"favored_matchups":12,"control_match_win_pct":0.7768,"control_expected_courts":2.0653,"group_avg_wins":2.403,"group_qualify":0.3864,"seed1":0.0803,"seed2":0.0984,"seed3":0.1066,"seed4":0.1011,"semis":0.3864,"final":0.1882,"champion":0.0866,"rank":4,"sched_exp_wins":2.5873,"sched_nmatch":4,"sched_sos":6.6882,"sched_opps":["Southern","Midwest","Intermountain","Northern"],"sched_qualify":0.4627,"sched_champion":0.1036},{"section":"Hawaii","lineup":{"lines":[{"line":"D1","rating":0.625525,"man":{"name":"Cody Lau","ntrp":4.0,"z":0.948071,"utr":7.28,"url":null},"woman":{"name":"Carol Mau","ntrp":4.0,"z":0.302979,"utr":6.3,"url":null}},{"line":"D2","rating":0.5366605,"man":{"name":"Alden Lum","ntrp":3.5,"z":0.651855,"utr":6.83,"url":null},"woman":{"name":"Caasi Nakasone","ntrp":4.5,"z":0.421466,"utr":6.48,"url":null}},{"line":"D3","rating":0.395135,"man":{"name":"Jackson Fong","ntrp":4.0,"z":0.744011,"utr":6.97,"url":null},"woman":{"name":"Sabrina Magdato","ntrp":4.0,"z":0.046259,"utr":5.91,"url":null}}]},"expected_wins":9.0058,"expected_win_pct":0.600387,"favored_matchups":11,"control_match_win_pct":0.7813,"control_expected_courts":2.0921,"group_avg_wins":2.4036,"group_qualify":0.3809,"seed1":0.0803,"seed2":0.096,"seed3":0.1055,"seed4":0.0991,"semis":0.3809,"final":0.1874,"champion":0.0851,"rank":5,"sched_exp_wins":2.3183,"sched_nmatch":4,"sched_sos":7.712,"sched_opps":["Southwest","Eastern","Texas","PNW"],"sched_qualify":0.3304,"sched_champion":0.0792},{"section":"PNW","lineup":{"lines":[{"line":"D1","rating":0.6419815,"man":{"name":"Paul Yi","ntrp":4.5,"z":1.988116,"utr":8.86,"url":null},"woman":{"name":"Annie Larsen","ntrp":3.5,"z":-0.704153,"utr":4.77,"url":null}},{"line":"D2","rating":0.4346305,"man":{"name":"Ryan Johnson","ntrp":4.5,"z":1.731396,"utr":8.47,"url":null},"woman":{"name":"Shanna Chua","ntrp":3.5,"z":-0.862135,"utr":4.53,"url":null}},{"line":"D3","rating":0.25361,"man":{"name":"Jacob Chiang","ntrp":3.5,"z":0.302979,"utr":6.3,"url":null},"woman":{"name":"Julie Hansen","ntrp":4.5,"z":0.204241,"utr":6.15,"url":null}}]},"expected_wins":8.3307,"expected_win_pct":0.55538,"favored_matchups":10,"control_match_win_pct":0.7458,"control_expected_courts":2.0077,"group_avg_wins":2.2096,"group_qualify":0.294,"seed1":0.0514,"seed2":0.0697,"seed3":0.0839,"seed4":0.089,"semis":0.294,"final":0.1264,"champion":0.0545,"rank":6,"sched_exp_wins":2.4197,"sched_nmatch":4,"sched_sos":6.6963,"sched_opps":["Middle States","Florida","Mid Atlantic","Hawaii"],"sched_qualify":0.3512,"sched_champion":0.066},{"section":"Intermountain","lineup":{"lines":[{"line":"D1","rating":0.6518555,"man":{"name":"Sean Amberg","ntrp":4.5,"z":1.731396,"utr":8.47,"url":null},"woman":{"name":"Seda Sargsyan","ntrp":3.5,"z":-0.427685,"utr":5.19,"url":null}},{"line":"D2","rating":0.3260185,"man":{"name":"Kyle Knecht","ntrp":4.5,"z":1.38252,"utr":7.94,"url":null},"woman":{"name":"Valerie Witherspoon","ntrp":3.5,"z":-0.730483,"utr":4.73,"url":null}},{"line":"D3","rating":0.194367,"man":{"name":"Brennan Price","ntrp":4.5,"z":1.35619,"utr":7.9,"url":null},"woman":{"name":"Nicole Reyes","ntrp":3.5,"z":-0.967456,"utr":4.37,"url":null}}]},"expected_wins":7.8483,"expected_win_pct":0.52322,"favored_matchups":9,"control_match_win_pct":0.719,"control_expected_courts":1.9476,"group_avg_wins":2.0761,"group_qualify":0.2362,"seed1":0.0416,"seed2":0.0558,"seed3":0.0609,"seed4":0.0779,"semis":0.2362,"final":0.0942,"champion":0.0366,"rank":7,"sched_exp_wins":2.002,"sched_nmatch":4,"sched_sos":7.8136,"sched_opps":["Florida","Middle States","MOValley","Socal"],"sched_qualify":0.1936,"sched_champion":0.0307},{"section":"Southern","lineup":{"lines":[{"line":"D1","rating":0.5959035,"man":{"name":"Hunter Holcomb","ntrp":4.0,"z":0.948071,"utr":7.28,"url":null},"woman":{"name":"Dallas Tanner","ntrp":4.0,"z":0.243736,"utr":6.21,"url":null}},{"line":"D2","rating":0.3589315,"man":{"name":"Zachary Christ","ntrp":4.0,"z":0.934906,"utr":7.26,"url":null},"woman":{"name":"Makenzie Woodward","ntrp":4.0,"z":-0.217043,"utr":5.51,"url":null}},{"line":"D3","rating":0.204241,"man":{"name":"Noah Rowell","ntrp":4.0,"z":0.928323,"utr":7.25,"url":null},"woman":{"name":"Allison Mayers","ntrp":4.0,"z":-0.519841,"utr":5.05,"url":null}}]},"expected_wins":7.8171,"expected_win_pct":0.52114,"favored_matchups":8,"control_match_win_pct":0.7176,"control_expected_courts":1.9455,"group_avg_wins":2.0779,"group_qualify":0.2309,"seed1":0.0387,"seed2":0.0522,"seed3":0.0606,"seed4":0.0794,"semis":0.2309,"final":0.0945,"champion":0.0376,"rank":8,"sched_exp_wins":2.4653,"sched_nmatch":4,"sched_sos":6.017,"sched_opps":["MOValley","Texas","Northern","Middle States"],"sched_qualify":0.3622,"sched_champion":0.0554},{"section":"Mid Atlantic","lineup":{"lines":[{"line":"D1","rating":0.260193,"man":{"name":"Eric DesRoberts","ntrp":4.0,"z":0.711099,"utr":6.92,"url":null},"woman":{"name":"Michelle Cameron","ntrp":4.0,"z":-0.190713,"utr":5.55,"url":null}},{"line":"D2","rating":0.2536105,"man":{"name":"Xavier Cha","ntrp":3.5,"z":0.270067,"utr":6.25,"url":null},"woman":{"name":"Eve Helmer","ntrp":4.5,"z":0.237154,"utr":6.2,"url":null}},{"line":"D3","rating":0.204241,"man":{"name":"Ryan Cinoman","ntrp":4.5,"z":1.35619,"utr":7.9,"url":null},"woman":{"name":"Jennie Kim","ntrp":3.5,"z":-0.947708,"utr":4.4,"url":null}}]},"expected_wins":6.4975,"expected_win_pct":0.433167,"favored_matchups":7,"control_match_win_pct":0.6402,"control_expected_courts":1.7837,"group_avg_wins":1.7408,"group_qualify":0.1316,"seed1":0.0167,"seed2":0.0268,"seed3":0.0368,"seed4":0.0513,"semis":0.1316,"final":0.0426,"champion":0.0128,"rank":9,"sched_exp_wins":1.4492,"sched_nmatch":4,"sched_sos":8.6652,"sched_opps":["Norcal","Socal","PNW","Southwest"],"sched_qualify":0.0738,"sched_champion":0.0083},{"section":"Florida","lineup":{"lines":[{"line":"D1","rating":0.5103305,"man":{"name":"Kevin Tran","ntrp":4.5,"z":1.32986,"utr":7.86,"url":null},"woman":{"name":"Lisa Pavichevich","ntrp":3.5,"z":-0.309199,"utr":5.37,"url":null}},{"line":"D2","rating":0.118668,"man":{"name":"Josh Weinstein","ntrp":4.0,"z":0.908576,"utr":7.22,"url":null},"woman":{"name":"Kirsten Shovlin","ntrp":4.0,"z":-0.67124,"utr":4.82,"url":null}},{"line":"D3","rating":0.0824635,"man":{"name":"Andrew Marro","ntrp":4.0,"z":0.901993,"utr":7.21,"url":null},"woman":{"name":"Jillian Blatt","ntrp":4.0,"z":-0.737066,"utr":4.72,"url":null}}]},"expected_wins":6.4672,"expected_win_pct":0.431147,"favored_matchups":6,"control_match_win_pct":0.637,"control_expected_courts":1.7752,"group_avg_wins":1.7254,"group_qualify":0.1192,"seed1":0.0156,"seed2":0.024,"seed3":0.033,"seed4":0.0466,"semis":0.1192,"final":0.0388,"champion":0.0126,"rank":10,"sched_exp_wins":1.5167,"sched_nmatch":4,"sched_sos":8.3663,"sched_opps":["Intermountain","PNW","Midwest","Eastern"],"sched_qualify":0.0745,"sched_champion":0.0075},{"section":"Midwest","lineup":{"lines":[{"line":"D1","rating":0.309562,"man":{"name":"Joseph Formicola","ntrp":4.0,"z":1.185043,"utr":7.64,"url":null},"woman":{"name":"Natalie Guo","ntrp":4.0,"z":-0.565919,"utr":4.98,"url":null}},{"line":"D2","rating":0.214115,"man":{"name":"Eric Gajar","ntrp":4.5,"z":1.468094,"utr":8.07,"url":null},"woman":{"name":"Chelsea Doyle","ntrp":3.5,"z":-1.039864,"utr":4.26,"url":null}},{"line":"D3","rating":0.1647455,"man":{"name":"Randy Winston","ntrp":4.0,"z":1.053392,"utr":7.44,"url":null},"woman":{"name":"Jennifer Sauld","ntrp":4.0,"z":-0.723901,"utr":4.74,"url":null}}]},"expected_wins":6.4096,"expected_win_pct":0.427307,"favored_matchups":5,"control_match_win_pct":0.6345,"control_expected_courts":1.7718,"group_avg_wins":1.7145,"group_qualify":0.1168,"seed1":0.0154,"seed2":0.026,"seed3":0.0319,"seed4":0.0435,"semis":0.1168,"final":0.0365,"champion":0.0097,"rank":11,"sched_exp_wins":1.7027,"sched_nmatch":4,"sched_sos":7.5839,"sched_opps":["Texas","MOValley","Florida","Norcal"],"sched_qualify":0.1085,"sched_champion":0.0108},{"section":"New England","lineup":{"lines":[{"line":"D1","rating":0.507039,"man":{"name":"Xiyuan Li","ntrp":4.0,"z":0.737429,"utr":6.96,"url":null},"woman":{"name":"Qi Jiang","ntrp":4.0,"z":0.276649,"utr":6.26,"url":null}},{"line":"D2","rating":0.0923375,"man":{"name":"Biao Liu","ntrp":4.0,"z":0.717681,"utr":6.93,"url":null},"woman":{"name":"BING SHUAI","ntrp":4.0,"z":-0.533006,"utr":5.03,"url":null}},{"line":"D3","rating":0.0725895,"man":{"name":"John Torrey","ntrp":4.0,"z":0.704516,"utr":6.91,"url":null},"woman":{"name":"Jenna Kauffman","ntrp":4.0,"z":-0.559337,"utr":4.99,"url":null}}]},"expected_wins":6.3489,"expected_win_pct":0.42326,"favored_matchups":4,"control_match_win_pct":0.6294,"control_expected_courts":1.7597,"group_avg_wins":1.6988,"group_qualify":0.1102,"seed1":0.0166,"seed2":0.0242,"seed3":0.028,"seed4":0.0414,"semis":0.1102,"final":0.037,"champion":0.0102,"rank":12,"sched_exp_wins":1.6831,"sched_nmatch":4,"sched_sos":7.6581,"sched_opps":["Socal","Norcal","Middle States","Texas"],"sched_qualify":0.0834,"sched_champion":0.0086},{"section":"Southwest","lineup":{"lines":[{"line":"D1","rating":0.345766,"man":{"name":"Todd Weiss","ntrp":4.0,"z":0.882245,"utr":7.18,"url":null},"woman":{"name":"Lindsay Kelso","ntrp":4.0,"z":-0.190713,"utr":5.55,"url":null}},{"line":"D2","rating":0.22728,"man":{"name":"Rob Leinbach","ntrp":4.0,"z":0.783507,"utr":7.03,"url":null},"woman":{"name":"Jenni Leinbach","ntrp":4.0,"z":-0.328947,"utr":5.34,"url":null}},{"line":"D3","rating":0.0001815,"man":{"name":"Matthew Jackson","ntrp":4.0,"z":0.526787,"utr":6.64,"url":null},"woman":{"name":"Rachel Brockway","ntrp":4.0,"z":-0.526424,"utr":5.04,"url":null}}]},"expected_wins":6.0765,"expected_win_pct":0.4051,"favored_matchups":3,"control_match_win_pct":0.6126,"control_expected_courts":1.7252,"group_avg_wins":1.6192,"group_qualify":0.093,"seed1":0.0125,"seed2":0.0188,"seed3":0.024,"seed4":0.0377,"semis":0.093,"final":0.0289,"champion":0.0067,"rank":13,"sched_exp_wins":1.6762,"sched_nmatch":4,"sched_sos":7.3684,"sched_opps":["Hawaii","Northern","Norcal","Mid Atlantic"],"sched_qualify":0.0864,"sched_champion":0.0086},{"section":"Texas","lineup":{"lines":[{"line":"D1","rating":0.286523,"man":{"name":"Andy Earthman","ntrp":4.0,"z":1.198208,"utr":7.66,"url":null},"woman":{"name":"Charity White","ntrp":4.0,"z":-0.625162,"utr":4.89,"url":null}},{"line":"D2","rating":0.1153765,"man":{"name":"Ryan Manchee","ntrp":4.0,"z":0.915158,"utr":7.23,"url":null},"woman":{"name":"Blake Ware","ntrp":3.5,"z":-0.684405,"utr":4.8,"url":null}},{"line":"D3","rating":-0.00311,"man":{"name":"Dale White","ntrp":4.5,"z":0.717681,"utr":6.93,"url":null},"woman":{"name":"Sloane Ware","ntrp":3.5,"z":-0.723901,"utr":4.74,"url":null}}]},"expected_wins":5.564,"expected_win_pct":0.370933,"favored_matchups":2,"control_match_win_pct":0.5787,"control_expected_courts":1.6574,"group_avg_wins":1.4874,"group_qualify":0.0703,"seed1":0.0089,"seed2":0.014,"seed3":0.0192,"seed4":0.0282,"semis":0.0703,"final":0.0195,"champion":0.0052,"rank":14,"sched_exp_wins":1.5249,"sched_nmatch":4,"sched_sos":7.3954,"sched_opps":["Midwest","Southern","Hawaii","New England"],"sched_qualify":0.0743,"sched_champion":0.0051},{"section":"Middle States","lineup":{"lines":[{"line":"D1","rating":0.148289,"man":{"name":"Jacob Braun","ntrp":4.0,"z":0.849332,"utr":7.13,"url":null},"woman":{"name":"Emily Pallaki","ntrp":4.0,"z":-0.552754,"utr":5.0,"url":null}},{"line":"D2","rating":0.0594245,"man":{"name":"Tyler McCullough","ntrp":4.5,"z":1.336442,"utr":7.87,"url":null},"woman":{"name":"Mary Campbell","ntrp":3.5,"z":-1.217593,"utr":3.99,"url":null}},{"line":"D3","rating":-0.075518,"man":{"name":"Bret Miller","ntrp":3.5,"z":-0.368442,"utr":5.28,"url":null},"woman":{"name":"Jacquelyn Connell","ntrp":4.5,"z":0.217406,"utr":6.17,"url":null}}]},"expected_wins":4.8147,"expected_win_pct":0.32098,"favored_matchups":1,"control_match_win_pct":0.5264,"control_expected_courts":1.5525,"group_avg_wins":1.2783,"group_qualify":0.0423,"seed1":0.0032,"seed2":0.0083,"seed3":0.0118,"seed4":0.019,"semis":0.0423,"final":0.0082,"champion":0.0017,"rank":15,"sched_exp_wins":1.2809,"sched_nmatch":4,"sched_sos":7.5862,"sched_opps":["PNW","Intermountain","New England","Southern"],"sched_qualify":0.0439,"sched_champion":0.0025},{"section":"Northern","lineup":{"lines":[{"line":"D1","rating":0.223989,"man":{"name":"Jack Linder","ntrp":4.5,"z":1.514172,"utr":8.14,"url":null},"woman":{"name":"Kate Beiler","ntrp":3.5,"z":-1.066194,"utr":4.22,"url":null}},{"line":"D2","rating":0.026512,"man":{"name":"Gabe Weitzer","ntrp":4.0,"z":1.059975,"utr":7.45,"url":null},"woman":{"name":"Lauren McCoy","ntrp":4.0,"z":-1.006951,"utr":4.31,"url":null}},{"line":"D3","rating":-0.1709655,"man":{"name":"Charlie Paul","ntrp":4.0,"z":0.974401,"utr":7.32,"url":null},"woman":{"name":"Zeny McCoy","ntrp":4.0,"z":-1.316332,"utr":3.84,"url":null}}]},"expected_wins":4.6776,"expected_win_pct":0.31184,"favored_matchups":0,"control_match_win_pct":0.5158,"control_expected_courts":1.5313,"group_avg_wins":1.2469,"group_qualify":0.0348,"seed1":0.0036,"seed2":0.0071,"seed3":0.0078,"seed4":0.0163,"semis":0.0348,"final":0.0075,"champion":0.0017,"rank":16,"sched_exp_wins":1.0783,"sched_nmatch":4,"sched_sos":8.4455,"sched_opps":["Eastern","Southwest","Southern","MOValley"],"sched_qualify":0.023,"sched_champion":0.0017}],"matrix":[[null,0.7754,0.6322,0.7014,0.7751,0.8519,0.7794,0.626,0.7812,0.6137,0.8571,0.6735,0.492,0.7036,0.795,0.8192],[0.2246,null,0.3365,0.4097,0.4976,0.6119,0.5035,0.338,0.5079,0.3187,0.6216,0.3789,0.2202,0.4116,0.526,0.5605],[0.3678,0.6635,null,0.5765,0.6624,0.7611,0.6677,0.497,0.6707,0.4804,0.7684,0.545,0.3611,0.5787,0.6875,0.718],[0.2986,0.5903,0.4235,null,0.5885,0.6962,0.5942,0.4226,0.5979,0.4044,0.7047,0.4682,0.2929,0.5021,0.6156,0.6486],[0.2249,0.5024,0.3376,0.4115,null,0.615,0.5059,0.3393,0.5104,0.3198,0.6246,0.3804,0.2205,0.4134,0.5285,0.5633],[0.1481,0.3881,0.2389,0.3038,0.385,null,0.3908,0.243,0.3958,0.2239,0.5105,0.276,0.1452,0.3053,0.413,0.4473],[0.2206,0.4965,0.3323,0.4058,0.4941,0.6092,null,0.3341,0.5045,0.3146,0.6189,0.3749,0.2163,0.4077,0.5226,0.5575],[0.374,0.662,0.503,0.5774,0.6607,0.757,0.6659,null,0.669,0.4839,0.7644,0.5469,0.3675,0.5796,0.6854,0.715],[0.2188,0.4921,0.3293,0.4021,0.4896,0.6042,0.4955,0.331,null,0.3117,0.614,0.3714,0.2145,0.404,0.518,0.5527],[0.3863,0.6813,0.5196,0.5956,0.6802,0.7761,0.6854,0.5161,0.6883,null,0.7832,0.5644,0.3793,0.5978,0.7047,0.7344],[0.1429,0.3784,0.2316,0.2953,0.3754,0.4895,0.3811,0.2356,0.386,0.2168,null,0.268,0.1401,0.2967,0.4031,0.4371],[0.3265,0.6211,0.455,0.5318,0.6196,0.724,0.6251,0.4531,0.6286,0.4356,0.732,null,0.3204,0.5339,0.646,0.678],[0.508,0.7798,0.6389,0.7071,0.7795,0.8548,0.7837,0.6325,0.7855,0.6207,0.8599,0.6796,null,0.7092,0.7991,0.8227],[0.2964,0.5884,0.4213,0.4979,0.5866,0.6947,0.5923,0.4204,0.596,0.4022,0.7033,0.4661,0.2908,null,0.6138,0.6469],[0.205,0.474,0.3125,0.3844,0.4715,0.587,0.4774,0.3146,0.482,0.2953,0.5969,0.354,0.2009,0.3862,null,0.5348],[0.1808,0.4395,0.282,0.3514,0.4367,0.5527,0.4425,0.285,0.4473,0.2656,0.5629,0.322,0.1773,0.3531,0.4652,null]],"schedule":[{"day":"Friday","slot":"10:00 AM","matches":[{"A":"Norcal","B":"Mid Atlantic","pA":0.6802,"fav":"Norcal","favPct":0.6802,"key":"Mid Atlantic vs Norcal","actual":null},{"A":"Middle States","B":"PNW","pA":0.276,"fav":"PNW","favPct":0.724,"key":"Middle States vs PNW","actual":null},{"A":"Texas","B":"Midwest","pA":0.4425,"fav":"Midwest","favPct":0.5575,"key":"Midwest vs Texas","actual":null},{"A":"MOValley","B":"Southern","pA":0.5796,"fav":"MOValley","favPct":0.5796,"key":"MOValley vs Southern","actual":null},{"A":"Florida","B":"Intermountain","pA":0.4097,"fav":"Intermountain","favPct":0.5903,"key":"Florida vs Intermountain","actual":null},{"A":"Socal","B":"New England","pA":0.7855,"fav":"Socal","favPct":0.7855,"key":"New England vs Socal","actual":null},{"A":"Hawaii","B":"Southwest","pA":0.6875,"fav":"Hawaii","favPct":0.6875,"key":"Hawaii vs Southwest","actual":null}]},{"day":"Friday","slot":"11:30 AM","matches":[{"A":"Eastern","B":"Northern","pA":0.8571,"fav":"Eastern","favPct":0.8571,"key":"Eastern vs Northern","actual":null}]},{"day":"Friday","slot":"2:30 PM","matches":[{"A":"Norcal","B":"New England","pA":0.6883,"fav":"Norcal","favPct":0.6883,"key":"New England vs Norcal","actual":null},{"A":"Middle States","B":"Intermountain","pA":0.3038,"fav":"Intermountain","favPct":0.6962,"key":"Intermountain vs Middle States","actual":null},{"A":"Texas","B":"Southern","pA":0.3531,"fav":"Southern","favPct":0.6469,"key":"Southern vs Texas","actual":null},{"A":"MOValley","B":"Midwest","pA":0.6659,"fav":"MOValley","favPct":0.6659,"key":"Midwest vs MOValley","actual":null},{"A":"Florida","B":"PNW","pA":0.3789,"fav":"PNW","favPct":0.6211,"key":"Florida vs PNW","actual":null},{"A":"Socal","B":"Mid Atlantic","pA":0.7795,"fav":"Socal","favPct":0.7795,"key":"Mid Atlantic vs Socal","actual":null}]},{"day":"Friday","slot":"4:00 PM","matches":[{"A":"Eastern","B":"Hawaii","pA":0.6322,"fav":"Eastern","favPct":0.6322,"key":"Eastern vs Hawaii","actual":null},{"A":"Northern","B":"Southwest","pA":0.4031,"fav":"Southwest","favPct":0.5969,"key":"Northern vs Southwest","actual":null}]},{"day":"Saturday","slot":"10:00 AM","matches":[{"A":"Mid Atlantic","B":"PNW","pA":0.3804,"fav":"PNW","favPct":0.6196,"key":"Mid Atlantic vs PNW","actual":null},{"A":"Northern","B":"Southern","pA":0.2967,"fav":"Southern","favPct":0.7033,"key":"Northern vs Southern","actual":null},{"A":"Norcal","B":"Southwest","pA":0.7047,"fav":"Norcal","favPct":0.7047,"key":"Norcal vs Southwest","actual":null},{"A":"Middle States","B":"New England","pA":0.3958,"fav":"New England","favPct":0.6042,"key":"Middle States vs New England","actual":null},{"A":"Texas","B":"Hawaii","pA":0.282,"fav":"Hawaii","favPct":0.718,"key":"Hawaii vs Texas","actual":null},{"A":"MOValley","B":"Intermountain","pA":0.5774,"fav":"MOValley","favPct":0.5774,"key":"Intermountain vs MOValley","actual":null},{"A":"Florida","B":"Midwest","pA":0.5035,"fav":"Florida","favPct":0.5035,"key":"Florida vs Midwest","actual":null}]},{"day":"Saturday","slot":"11:30 AM","matches":[{"A":"Eastern","B":"Socal","pA":0.492,"fav":"Socal","favPct":0.508,"key":"Eastern vs Socal","actual":null}]},{"day":"Saturday","slot":"2:30 PM","matches":[{"A":"PNW","B":"Hawaii","pA":0.455,"fav":"Hawaii","favPct":0.545,"key":"Hawaii vs PNW","actual":null},{"A":"Mid Atlantic","B":"Southwest","pA":0.5285,"fav":"Mid Atlantic","favPct":0.5285,"key":"Mid Atlantic vs Southwest","actual":null},{"A":"Norcal","B":"Midwest","pA":0.6854,"fav":"Norcal","favPct":0.6854,"key":"Midwest vs Norcal","actual":null},{"A":"Middle States","B":"Southern","pA":0.3053,"fav":"Southern","favPct":0.6947,"key":"Middle States vs Southern","actual":null},{"A":"Texas","B":"New England","pA":0.4473,"fav":"New England","favPct":0.5527,"key":"New England vs Texas","actual":null},{"A":"MOValley","B":"Northern","pA":0.7644,"fav":"MOValley","favPct":0.7644,"key":"MOValley vs Northern","actual":null}]},{"day":"Saturday","slot":"4:00 PM","matches":[{"A":"Eastern","B":"Florida","pA":0.7754,"fav":"Eastern","favPct":0.7754,"key":"Eastern vs Florida","actual":null},{"A":"Intermountain","B":"Socal","pA":0.2929,"fav":"Socal","favPct":0.7071,"key":"Intermountain vs Socal","actual":null}]}],"scheduleStatus":"verified","counts":{"matches":32,"played":0,"upsets":0},"teamMatches":{"Eastern":[{"opp":"Northern","pWin":0.8571,"fav":true,"actual":null,"day":"Friday","slot":"11:30 AM","lineWin":[0.7635,0.7374,0.79]},{"opp":"Hawaii","pWin":0.6322,"fav":true,"actual":null,"day":"Friday","slot":"4:00 PM","lineWin":[0.624,0.5498,0.5949]},{"opp":"Socal","pWin":0.492,"fav":false,"actual":null,"day":"Saturday","slot":"11:30 AM","lineWin":[0.4424,0.4934,0.5459]},{"opp":"Florida","pWin":0.7754,"fav":true,"actual":null,"day":"Saturday","slot":"4:00 PM","lineWin":[0.6668,0.7065,0.7098]}],"Florida":[{"opp":"Intermountain","pWin":0.4097,"fav":false,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.4437,0.4179,0.4554]},{"opp":"PNW","pWin":0.3789,"fav":false,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.4476,0.376,0.4321]},{"opp":"Midwest","pWin":0.5035,"fav":true,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.5796,0.462,0.4672]},{"opp":"Eastern","pWin":0.2246,"fav":false,"actual":null,"day":"Saturday","slot":"4:00 PM","lineWin":[0.3332,0.2935,0.2902]}],"Hawaii":[{"opp":"Southwest","pWin":0.6875,"fav":true,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.6102,0.6215,0.6536]},{"opp":"Eastern","pWin":0.3678,"fav":false,"actual":null,"day":"Friday","slot":"4:00 PM","lineWin":[0.376,0.4502,0.4051]},{"opp":"Texas","pWin":0.718,"fav":true,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.6327,0.6632,0.6548]},{"opp":"PNW","pWin":0.545,"fav":true,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.4934,0.5406,0.5563]}],"Intermountain":[{"opp":"Florida","pWin":0.5903,"fav":true,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.5563,0.5821,0.5446]},{"opp":"Middle States","pWin":0.6962,"fav":true,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.6927,0.6051,0.6064]},{"opp":"MOValley","pWin":0.4226,"fav":false,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.3296,0.4777,0.5236]},{"opp":"Socal","pWin":0.2929,"fav":false,"actual":null,"day":"Saturday","slot":"4:00 PM","lineWin":[0.332,0.3624,0.3723]}],"Mid Atlantic":[{"opp":"Norcal","pWin":0.3198,"fav":false,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.3513,0.3949,0.386]},{"opp":"Socal","pWin":0.2205,"fav":false,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.2044,0.3356,0.376]},{"opp":"PNW","pWin":0.3804,"fav":false,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.3513,0.4282,0.4803]},{"opp":"Southwest","pWin":0.5285,"fav":true,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.4659,0.5105,0.5808]}],"Middle States":[{"opp":"PNW","pWin":0.276,"fav":false,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.3108,0.3538,0.371]},{"opp":"Intermountain","pWin":0.3038,"fav":false,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.3073,0.3949,0.3936]},{"opp":"New England","pWin":0.3958,"fav":false,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.3599,0.4869,0.4411]},{"opp":"Southern","pWin":0.3053,"fav":false,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.3272,0.3823,0.3898]}],"Midwest":[{"opp":"Texas","pWin":0.5575,"fav":true,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.5092,0.5393,0.5667]},{"opp":"MOValley","pWin":0.3341,"fav":false,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.2167,0.4333,0.5118]},{"opp":"Florida","pWin":0.4965,"fav":false,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.4204,0.538,0.5328]},{"opp":"Norcal","pWin":0.3146,"fav":false,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.3698,0.3798,0.371]}],"MOValley":[{"opp":"Southern","pWin":0.5796,"fav":true,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.6904,0.5092,0.4724]},{"opp":"Midwest","pWin":0.6659,"fav":true,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.7833,0.5667,0.4882]},{"opp":"Intermountain","pWin":0.5774,"fav":true,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.6704,0.5223,0.4764]},{"opp":"Northern","pWin":0.7644,"fav":true,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.8075,0.6389,0.6202]}],"New England":[{"opp":"Socal","pWin":0.2145,"fav":false,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.2812,0.279,0.3272]},{"opp":"Norcal","pWin":0.3117,"fav":false,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.4463,0.3344,0.3368]},{"opp":"Middle States","pWin":0.6042,"fav":true,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.6401,0.5131,0.5589]},{"opp":"Texas","pWin":0.5527,"fav":true,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.5873,0.4908,0.5302]}],"Norcal":[{"opp":"Mid Atlantic","pWin":0.6802,"fav":true,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.6487,0.6051,0.614]},{"opp":"New England","pWin":0.6883,"fav":true,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.5537,0.6656,0.6632]},{"opp":"Southwest","pWin":0.7047,"fav":true,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.6165,0.6152,0.6892]},{"opp":"Midwest","pWin":0.6854,"fav":true,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.6302,0.6202,0.629]}],"Northern":[{"opp":"Eastern","pWin":0.1429,"fav":false,"actual":null,"day":"Friday","slot":"11:30 AM","lineWin":[0.2365,0.2626,0.21]},{"opp":"Southwest","pWin":0.4031,"fav":false,"actual":null,"day":"Friday","slot":"4:00 PM","lineWin":[0.4515,0.4204,0.4321]},{"opp":"Southern","pWin":0.2967,"fav":false,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.355,0.3698,0.3538]},{"opp":"MOValley","pWin":0.2356,"fav":false,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.1925,0.3611,0.3798]}],"PNW":[{"opp":"Middle States","pWin":0.724,"fav":true,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.6892,0.6462,0.629]},{"opp":"Florida","pWin":0.6211,"fav":true,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.5524,0.624,0.5679]},{"opp":"Mid Atlantic","pWin":0.6196,"fav":true,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.6487,0.5718,0.5197]},{"opp":"Hawaii","pWin":0.455,"fav":false,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.5066,0.4594,0.4437]}],"Socal":[{"opp":"New England","pWin":0.7855,"fav":true,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.7188,0.721,0.6728]},{"opp":"Mid Atlantic","pWin":0.7795,"fav":true,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.7956,0.6644,0.624]},{"opp":"Eastern","pWin":0.508,"fav":true,"actual":null,"day":"Saturday","slot":"11:30 AM","lineWin":[0.5576,0.5066,0.4541]},{"opp":"Intermountain","pWin":0.7071,"fav":true,"actual":null,"day":"Saturday","slot":"4:00 PM","lineWin":[0.668,0.6376,0.6277]}],"Southern":[{"opp":"MOValley","pWin":0.4204,"fav":false,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.3096,0.4908,0.5276]},{"opp":"Texas","pWin":0.6469,"fav":true,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.6215,0.5962,0.5821]},{"opp":"Northern","pWin":0.7033,"fav":true,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.645,0.6302,0.6462]},{"opp":"Middle States","pWin":0.6947,"fav":true,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.6728,0.6177,0.6102]}],"Southwest":[{"opp":"Hawaii","pWin":0.3125,"fav":false,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.3898,0.3785,0.3464]},{"opp":"Northern","pWin":0.5969,"fav":true,"actual":null,"day":"Friday","slot":"4:00 PM","lineWin":[0.5485,0.5796,0.5679]},{"opp":"Norcal","pWin":0.2953,"fav":false,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.3835,0.3848,0.3108]},{"opp":"Mid Atlantic","pWin":0.4715,"fav":false,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.5341,0.4895,0.4192]}],"Texas":[{"opp":"Midwest","pWin":0.4425,"fav":false,"actual":null,"day":"Friday","slot":"10:00 AM","lineWin":[0.4908,0.4607,0.4333]},{"opp":"Southern","pWin":0.3531,"fav":false,"actual":null,"day":"Friday","slot":"2:30 PM","lineWin":[0.3785,0.4038,0.4179]},{"opp":"Hawaii","pWin":0.282,"fav":false,"actual":null,"day":"Saturday","slot":"10:00 AM","lineWin":[0.3673,0.3368,0.3452]},{"opp":"New England","pWin":0.4473,"fav":false,"actual":null,"day":"Saturday","slot":"2:30 PM","lineWin":[0.4127,0.5092,0.4698]}]},"schedCols":4,"hasSchedule":true}</script>
+<script>
+var D=JSON.parse(document.getElementById('payload').textContent);
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+function disp(s){return D.disp[s]||s;}
+function pct(p){return Math.round(p*100)+'%';}
+function tint(p){var g=[139,208,166],r=[238,172,163],w=[255,255,255];
+  var c=p>=0.5?g.map(function(v,k){return Math.round(w[k]+(v-w[k])*Math.min(1,(p-0.5)*2));})
+              :r.map(function(v,k){return Math.round(w[k]+(v-w[k])*Math.min(1,(0.5-p)*2));});
+  return 'rgb('+c[0]+','+c[1]+','+c[2]+')';}
+
+// banner
+if(D.placeholder){document.getElementById('banner').innerHTML='<div class="banner"><b>Placeholder ratings.</b> '+
+ 'Every player is at the league mean, so all teams are currently equal and all odds are symmetric. '+
+ 'Scrape UTR and replace <code>data/rosters_8_0.json</code> (same schema), re-run, and the whole board differentiates.</div>';}
+document.getElementById('nopp').textContent=D.nOpp;
+
+// power table (pure strength vs all 15)
+var mx=Math.max.apply(null,D.teams.map(function(t){return t.expected_wins;}))||1;
+document.querySelector('#powerTable tbody').innerHTML=D.teams.map(function(t){
+  return '<tr><td class="rank">'+t.rank+'</td><td><b>'+esc(disp(t.section))+'</b></td>'
+    +'<td>'+t.expected_wins.toFixed(2)+'</td><td>'+t.favored_matchups+'</td>'
+    +'<td class="barcell"><div class="bar"><i style="width:'+(t.expected_wins/mx*100).toFixed(1)+'%"></i></div></td></tr>';
+}).join('');
+
+// schedule-adjusted standings (actual 4 matchups)
+if(!D.hasSchedule){document.getElementById('schedPanel').style.display='none';}
+else{
+  document.getElementById('gd2').textContent=D.groupDraws.toLocaleString();
+  var powerRank={}; D.teams.forEach(function(t){powerRank[t.section]=t.rank;});
+  var srt=D.teams.slice().sort(function(a,b){return b.sched_exp_wins-a.sched_exp_wins;});
+  document.querySelector('#schedTable tbody').innerHTML=srt.map(function(t,idx){
+    var rk=idx+1, d=powerRank[t.section]-rk;
+    var delta=d===0?'<span style="color:var(--muted)">&middot;</span>'
+      :(d>0?'<span style="color:var(--green)" title="easier draw">&uarr;'+d+'</span>'
+          :'<span style="color:var(--red)" title="tougher draw">&darr;'+(-d)+'</span>');
+    return '<tr><td class="rank">'+rk+'</td><td><b>'+esc(disp(t.section))+'</b></td>'
+      +'<td><b>'+t.sched_exp_wins.toFixed(2)+'</b></td><td>'+t.sched_sos.toFixed(1)+'</td>'
+      +'<td>'+pct(t.sched_qualify)+'</td><td>'+pct(t.sched_champion)+'</td>'
+      +'<td>'+delta+'</td></tr>';
+  }).join('');
+}
+
+// lineups
+document.getElementById('lineupGrid').innerHTML=D.teams.map(function(t){
+  var lines=t.lineup.lines.map(function(l){
+    function who(p,cls){var u=p.utr!=null?' <span class="meta">UTR '+p.utr+'</span>':'';
+      return '<div class="p"><span class="g '+cls+'">'+(cls=='m'?'M':'W')+'</span>'+esc(p.name)+' <span class="meta">'+p.ntrp.toFixed(1)+'</span>'+u+'</div>';}
+    return '<div class="ln"><b>'+l.line+'</b><div class="pair">'+who(l.man,'m')+who(l.woman,'w')+'</div></div>';
+  }).join('');
+  return '<div class="team-card"><h3>'+t.rank+'. '+esc(disp(t.section))+'</h3>'
+    +'<div class="region">Expected wins/16 '+t.expected_wins.toFixed(2)+' &middot; title '+pct(t.champion)+'</div>'+lines+'</div>';
+}).join('');
+
+// matrix (alpha order == payload matrix index)
+var secs=D.sections.slice();
+var head='<thead><tr><th>Section</th>'+secs.map(function(s){return '<th>'+esc(disp(s))+'</th>';}).join('')+'</tr></thead>';
+var rows=secs.map(function(rs,i){
+  var tds=secs.map(function(cs,j){ if(i==j) return '<td style="background:#eef2ef;color:#aab5ae">&middot;</td>';
+    var p=D.matrix[i][j]; return '<td style="background:'+tint(p)+'">'+pct(p)+'</td>';}).join('');
+  return '<tr><td><b>'+esc(disp(rs))+'</b></td>'+tds+'</tr>';
+}).join('');
+document.getElementById('matrixTable').innerHTML=head+'<tbody>'+rows+'</tbody>';
+
+// match grid (rows = teams, cols = their 4 matches; lineup | expected / actual)
+(function(){
+  var c=D.counts||{matches:0,played:0,upsets:0};
+  var verified=D.scheduleStatus==='verified';
+  document.getElementById('schedMeta').innerHTML=
+    '<b>'+c.matches+'</b> matches &middot; <b>'+c.played+'</b> played &middot; <b>'+c.upsets+'</b> upset'
+    +(c.upsets===1?'':'s')+'. Schedule: '+(verified?'verified':'<b style="color:#9a7b22">DRAFT</b>');
+
+  // section -> D1..D3 lineup, and team display order (by power ranking)
+  var LU={}; D.teams.forEach(function(t){LU[t.section]=t.lineup.lines;});
+  var order=D.teams.map(function(t){return t.section;});
+  var rankOf={}; D.teams.forEach(function(t){rankOf[t.section]=t.rank;});
+  var cols=D.schedCols||4;
+
+  // rating shown as NTRP/UTR (color-coded), e.g. 4.5/7.04  (UTR '-' when unrated)
+  function rtg(p){return '<span class="ntrp">'+p.ntrp.toFixed(1)+'</span>'
+    +'<span class="ratsl">/</span><span class="utr">'+(p.utr!=null?p.utr:'–')+'</span>';}
+  function nm(p,cls){return '<span class="'+cls+'">'+esc(p.name)+'</span> '+rtg(p);}
+
+  // own lineup column (names + NTRP/UTR, no bars), horizontally scrollable
+  function ownLineup(sec){
+    return '<div class="luwrap">'+(LU[sec]||[]).map(function(l){
+      return '<div class="lu"><b>'+l.line+'</b>'+nm(l.man,'m')
+        +'<span class="sep"> / </span>'+nm(l.woman,'w')+'</div>';
+    }).join('')+'</div>';
+  }
+
+  // one opponent line with a win-prob bar (p = our Dk win prob for that line)
+  function oppLine(l,p){
+    var w=Math.round(p*100), col=p>=0.5?'#218c59':'#d4645d';
+    return '<div class="lnrow"><b>'+l.line+'</b>'
+      +'<span class="lbar"><i style="width:'+w+'%;background:'+col+'"></i><span class="pc">'+w+'</span></span>'
+      +'<span class="lnames">'+nm(l.man,'m')+'<span class="sep"> / </span>'+nm(l.woman,'w')+'</span></div>';
+  }
+
+  function cell(sec,mt){
+    if(!mt) return '<td class="mcell empty">&middot;</td>';
+    var pickem=Math.abs(mt.pWin-0.5)<1e-6;
+    var cls=pickem?'pickem':(mt.fav?'win':'loss');
+    var expV=pickem?'Pick&rsquo;em 50%':((mt.fav?'Win ':'Loss ')+pct(mt.pWin));
+    var oppL=LU[mt.opp]||[];
+    var lines='<div class="oppwrap">'+oppL.map(function(l,k){return oppLine(l,(mt.lineWin&&mt.lineWin[k]!=null)?mt.lineWin[k]:0.5);}).join('')+'</div>';
+    var act;
+    if(!mt.actual){
+      act='<div class="mact pending"><span class="lbl">Actual</span><span class="v">&mdash;</span></div>';
+    }else{
+      var won=mt.actual===sec, up=(won!==mt.fav)&&!pickem;
+      act='<div class="mact '+(won?'win':'loss')+'"><span class="lbl">Actual</span>'
+         +'<span class="v">'+(won?'Won':'Lost')+'</span>'+(up?'<span class="flag">UPSET</span>':'')+'</div>';
+    }
+    return '<td class="mcell"><div class="mbox '+(mt.fav?'fav':'dog')+'">'
+      +'<div class="opphd">'+esc(mt.day?mt.day.slice(0,3):'')+' '+esc(mt.slot||'')
+        +' &middot; vs <b>'+esc(disp(mt.opp))+'</b></div>'+lines
+      +'<div class="mresult">'
+        +'<div class="mexp '+cls+'"><span class="lbl">Expected</span><span class="v">'+expV+'</span></div>'
+        +act
+      +'</div></div></td>';
+  }
+
+  var hcols=''; for(var i=1;i<=cols;i++){hcols+='<th>Match '+i+'</th>';}
+  var head='<thead><tr><th class="c-sec">Section</th><th class="c-lu">Top lineup (UTR)</th>'+hcols+'</tr></thead>';
+  function bodyFor(list){
+    return '<tbody>'+list.map(function(sec){
+      var mts=D.teamMatches[sec]||[];
+      var tds=''; for(var i=0;i<cols;i++){tds+=cell(sec,mts[i]);}
+      return '<tr><td class="c-sec"><span class="rk">'+rankOf[sec]+'</span>'+esc(disp(sec))
+        +'<small>'+mts.length+' matches</small></td>'
+        +'<td class="c-lu">'+ownLineup(sec)+'</td>'+tds+'</tr>';
+    }).join('')+'</tbody>';
+  }
+  document.getElementById('matchGrid').innerHTML=head+bodyFor(order);
+})();
+
+document.getElementById('foot').textContent='8.0 Mixed: '+D.lines+' mixed-doubles lines, line NTRP sum ≤ '
+ +D.maxCombined+', tie won at '+D.win+' of '+D.lines+'. Group MC '+D.groupDraws.toLocaleString()
+ +' draws, seed '+D.seed+'. '+(D.placeholder?'Placeholder mean ratings.':'');
+
+// tabs
+document.querySelectorAll('.tab').forEach(function(b){b.onclick=function(){
+  document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});
+  document.querySelectorAll('.tabpane').forEach(function(x){x.classList.remove('active');});
+  b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active');};});
+</script></body></html>
