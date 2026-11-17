@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PNW NTRP Bump Watch 2026</title>
+<meta name="description" content="Men's 4.5 and 4.0 year-end NTRP bump candidates, Northwest Washington.">
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    --bg:#f3f6f4; --panel:#ffffff; --panel2:#eef2ef; --fg:#15221c; --muted:#5f6f67;
+    --line:#dde5e0; --accent:#168653;
+    --down:#d1443b; --down-soft:#f8dedb; --up:#1f9d63; --up-soft:#d8f0e3; --warn:#c7841a;
+    --shadow:0 1px 2px rgba(16,32,24,.05),0 8px 24px rgba(16,32,24,.06);
+    --f:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+    --bg:#0e1511; --panel:#161f19; --panel2:#1d2821; --fg:#e6eee9; --muted:#97a69d;
+    --line:#293a31; --accent:#46c489;
+    --down:#f0756c; --down-soft:#3a1a18; --up:#46c489; --up-soft:#133026; --warn:#e3a94a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4); color-scheme:dark;
+  }}
+  :root[data-theme=dark]{
+    --bg:#0e1511; --panel:#161f19; --panel2:#1d2821; --fg:#e6eee9; --muted:#97a69d;
+    --line:#293a31; --accent:#46c489;
+    --down:#f0756c; --down-soft:#3a1a18; --up:#46c489; --up-soft:#133026; --warn:#e3a94a;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4); color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-left)) 60px}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+  .eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:700;color:var(--muted)}
+  h1{font-size:clamp(23px,5vw,32px);margin:4px 0 6px;letter-spacing:-.01em}
+  p.sub{color:var(--muted);margin:0 0 4px;max-width:62ch;font-size:14px}
+  .tbtn{background:var(--panel);border:1px solid var(--line);border-radius:8px;color:var(--muted);cursor:pointer;font-size:12px;padding:6px 10px;font-family:var(--f)}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+  .tile{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+  .tile .k{font-size:12px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:7px}
+  .tile .v{font-size:30px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+  .tile.down .v{color:var(--down)} .tile.up .v{color:var(--up)}
+  .dot{width:9px;height:9px;border-radius:50%} .dot.d{background:var(--down)} .dot.u{background:var(--up)}
+  .controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:4px 0 14px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:5}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--panel)}
+  .seg button{border:0;background:transparent;color:var(--muted);font-family:var(--f);font-size:12.5px;font-weight:600;padding:7px 12px;cursor:pointer}
+  .seg button[aria-pressed=true]{background:var(--accent);color:#fff}
+  input[type=search]{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:8px 11px;color:var(--fg);font-family:var(--f);font-size:13px}
+  .count{color:var(--muted);font-size:12.5px;margin-left:auto}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:var(--shadow)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+  th,td{text-align:left;padding:9px 13px;border-bottom:1px solid var(--line);white-space:nowrap}
+  thead th{position:sticky;top:0;background:var(--panel2);font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:700;cursor:pointer;user-select:none}
+  thead th.sorted::after{content:" \25B4";opacity:.7} thead th.sorted.desc::after{content:" \25BE"}
+  tbody tr:last-child td{border-bottom:0}
+  td.dyn{font-variant-numeric:tabular-nums;font-weight:700}
+  .pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:700}
+  .pill.down{background:var(--down-soft);color:var(--down)} .pill.up{background:var(--up-soft);color:var(--up)}
+  .zone{font-size:11px;font-weight:600;color:var(--muted)} .zone.strong{color:var(--fg)}
+  .type{font-size:11px;font-weight:700;color:var(--muted)} .type.C{color:var(--accent)}
+  tr.down td.dyn{color:var(--down)} tr.up td.dyn{color:var(--up)}
+  .star{color:var(--warn)}
+  footer{color:var(--muted);font-size:12px;margin-top:22px;line-height:1.6}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted);margin-top:10px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  @media(max-width:560px){.tiles{grid-template-columns:1fr}}
+</style>
+</head><body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <div class="eyebrow">USTA &middot; Pacific NW &middot; Northwest Washington &middot; Men</div>
+      <h1>NTRP Bump Watch 2026</h1>
+      <p class="sub">Players whose dynamic rating sits close enough to the 4.0/4.5 line (a 4.00 dynamic) to flip level when the year-end ratings publish, expected <b>2026-12-03</b>. Source dynamics from TennisRecord, updated 2026-11-05.</p>
+    </div>
+    <button class="tbtn" id="theme" type="button">Theme</button>
+  </div>
+
+  <div class="tiles">
+    <div class="tile down"><div class="k"><span class="dot d"></span>Bump down &middot; 4.5 &rarr; 4.0</div><div class="v">62</div><div class="zone">current 4.5, dynamic &le; 4.10</div></div>
+    <div class="tile up"><div class="k"><span class="dot u"></span>Bump up &middot; 4.0 &rarr; 4.5</div><div class="v">89</div><div class="zone">current 4.0, dynamic &ge; 3.95</div></div>
+  </div>
+
+  <div class="controls">
+    <div class="seg" id="dir">
+      <button data-v="all" aria-pressed="true">All</button>
+      <button data-v="down">&darr; Down</button>
+      <button data-v="up">&uarr; Up</button>
+    </div>
+    <div class="seg" id="type">
+      <button data-v="all" aria-pressed="true">Any</button>
+      <button data-v="C">Computer</button>
+      <button data-v="S">Self</button>
+    </div>
+    <div class="seg" id="strong">
+      <button data-v="all" aria-pressed="true">All</button>
+      <button data-v="1">Strong only</button>
+    </div>
+    <input type="search" id="q" placeholder="Search player&hellip;" autocomplete="off">
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th data-k="dyn">Dynamic</th>
+        <th data-k="name">Player</th>
+        <th data-k="cur">Current</th>
+        <th data-k="type">Type</th>
+        <th data-k="dir">Direction</th>
+        <th data-k="strong">Zone</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <span><span class="dot d"></span>4.5 drifting toward 4.0</span>
+    <span><span class="dot u"></span>4.0 drifting toward 4.5</span>
+    <span><b class="type C">Computer</b> = season-earned</span>
+    <span><b class="type">Self</b> = provisional</span>
+    <span><span class="star">&#9733;</span> Strong = across the 4.00 line</span>
+  </div>
+
+  <footer>
+    <b>How to read it.</b> A level spans a 0.50-wide dynamic band; the 4.0/4.5 boundary is a 4.00 dynamic. A 4.5 near 4.00 is at risk of dropping; a 4.0 near 4.00 is at risk of rising. Thresholds (4.10 down / 3.95 up) are buffers around the line. <b>Computer-rated</b> players earned the number over a season (defensible); <b>self-rated</b> dynamics are provisional. These are estimates &mdash; the official year-end numbers are what actually move people. Men / Northwest Washington only. Generated 2026-11-17.
+  </footer>
+</div>
+
+<script>
+const DATA = [{"name":"Mason Thornton","cur":"4.5 S","dir":"down","type":"S","dyn":3.5562,"strong":true},{"name":"Ian Chao","cur":"4.5 S","dir":"down","type":"S","dyn":3.601,"strong":true},{"name":"Patrick Connelly","cur":"4.5 S","dir":"down","type":"S","dyn":3.6101,"strong":true},{"name":"Jean-Philippe MULA","cur":"4.5 S","dir":"down","type":"S","dyn":3.6794,"strong":true},{"name":"Yehu Chen","cur":"4.5 S","dir":"down","type":"S","dyn":3.7117,"strong":true},{"name":"Ben Silber","cur":"4.5 S","dir":"down","type":"S","dyn":3.7321,"strong":true},{"name":"Blake Gettmann","cur":"4.5 S","dir":"down","type":"S","dyn":3.8342,"strong":true},{"name":"Benjamin Tudor","cur":"4.5 S","dir":"down","type":"S","dyn":3.8614,"strong":true},{"name":"Preston Dumas","cur":"4.5 C","dir":"down","type":"C","dyn":3.8799,"strong":true},{"name":"Gavin Landon","cur":"4.5 S","dir":"down","type":"S","dyn":3.9117,"strong":true},{"name":"Subeer Manhas","cur":"4.5 C","dir":"down","type":"C","dyn":3.9369,"strong":true},{"name":"Jeff Charters","cur":"4.5 S","dir":"down","type":"S","dyn":3.9385,"strong":true},{"name":"Samuel Finkleman","cur":"4.5 S","dir":"down","type":"S","dyn":3.9445,"strong":true},{"name":"Billy Poll","cur":"4.5 S","dir":"down","type":"S","dyn":3.9549,"strong":true},{"name":"Daniel Bor","cur":"4.5 S","dir":"down","type":"S","dyn":3.9621,"strong":true},{"name":"Benjamin Chen","cur":"4.5 C","dir":"down","type":"C","dyn":3.9763,"strong":true},{"name":"Adam Brown","cur":"4.5 C","dir":"down","type":"C","dyn":3.9827,"strong":true},{"name":"Aaron Dixon","cur":"4.5 C","dir":"down","type":"C","dyn":3.9849,"strong":true},{"name":"Spencer Goll","cur":"4.5 S","dir":"down","type":"S","dyn":3.9991,"strong":true},{"name":"Yung Hu","cur":"4.5 C","dir":"down","type":"C","dyn":4.0053,"strong":false},{"name":"ben ferry","cur":"4.5 C","dir":"down","type":"C","dyn":4.01,"strong":false},{"name":"Michael Karachewski","cur":"4.5 C","dir":"down","type":"C","dyn":4.01,"strong":false},{"name":"Valay Shah","cur":"4.5 C","dir":"down","type":"C","dyn":4.01,"strong":false},{"name":"jerit smith","cur":"4.5 C","dir":"down","type":"C","dyn":4.01,"strong":false},{"name":"Yash Kelkar","cur":"4.5 S","dir":"down","type":"S","dyn":4.012,"strong":false},{"name":"Joshua Kim","cur":"4.5 S","dir":"down","type":"S","dyn":4.0123,"strong":false},{"name":"Anthony Tran","cur":"4.5 C","dir":"down","type":"C","dyn":4.0141,"strong":false},{"name":"Brandon Feldman","cur":"4.5 C","dir":"down","type":"C","dyn":4.0179,"strong":false},{"name":"Aaron Coe","cur":"4.5 C","dir":"down","type":"C","dyn":4.0226,"strong":false},{"name":"David Doud","cur":"4.5 S","dir":"down","type":"S","dyn":4.0333,"strong":false},{"name":"Chad O'Connor","cur":"4.5 C","dir":"down","type":"C","dyn":4.0343,"strong":false},{"name":"Arun Chokkalingam","cur":"4.5 C","dir":"down","type":"C","dyn":4.0376,"strong":false},{"name":"Qiming Jiang","cur":"4.5 C","dir":"down","type":"C","dyn":4.0386,"strong":false},{"name":"Noah Gronwald","cur":"4.5 C","dir":"down","type":"C","dyn":4.0399,"strong":false},{"name":"Albert Lu","cur":"4.5 C","dir":"down","type":"C","dyn":4.0417,"strong":false},{"name":"Chien Chang","cur":"4.5 C","dir":"down","type":"C","dyn":4.0446,"strong":false},{"name":"Hao Dang","cur":"4.5 C","dir":"down","type":"C","dyn":4.0491,"strong":false},{"name":"Blake Garfield","cur":"4.5 C","dir":"down","type":"C","dyn":4.0491,"strong":false},{"name":"Jonathan Lai","cur":"4.5 C","dir":"down","type":"C","dyn":4.0497,"strong":false},{"name":"Kurt Bradshaw","cur":"4.5 S","dir":"down","type":"S","dyn":4.0509,"strong":false},{"name":"Kevin Bay","cur":"4.5 C","dir":"down","type":"C","dyn":4.0538,"strong":false},{"name":"Van Vuong","cur":"4.5 C","dir":"down","type":"C","dyn":4.0538,"strong":false},{"name":"Bob Strickland","cur":"4.5 C","dir":"down","type":"C","dyn":4.0544,"strong":false},{"name":"Austin Hamamoto","cur":"4.5 C","dir":"down","type":"C","dyn":4.0567,"strong":false},{"name":"Bronson Shonk","cur":"4.5 C","dir":"down","type":"C","dyn":4.0576,"strong":false},{"name":"Ham Kang","cur":"4.5 C","dir":"down","type":"C","dyn":4.0616,"strong":false},{"name":"Ronald Beresky","cur":"4.5 C","dir":"down","type":"C","dyn":4.0678,"strong":false},{"name":"Gabriel Ambruso","cur":"4.5 C","dir":"down","type":"C","dyn":4.0694,"strong":false},{"name":"David Tobar","cur":"4.5 C","dir":"down","type":"C","dyn":4.078,"strong":false},{"name":"Alexey Bulychev","cur":"4.5 S","dir":"down","type":"S","dyn":4.0789,"strong":false},{"name":"John Easley","cur":"4.5 C","dir":"down","type":"C","dyn":4.0829,"strong":false},{"name":"George Huang","cur":"4.5 C","dir":"down","type":"C","dyn":4.0846,"strong":false},{"name":"Kevin Tsay","cur":"4.5 C","dir":"down","type":"C","dyn":4.0873,"strong":false},{"name":"David Emery-Peck","cur":"4.5 S","dir":"down","type":"S","dyn":4.0897,"strong":false},{"name":"Manish Dalal","cur":"4.5 C","dir":"down","type":"C","dyn":4.0901,"strong":false},{"name":"Stephen Yang","cur":"4.5 C","dir":"down","type":"C","dyn":4.0914,"strong":false},{"name":"Trent Morton","cur":"4.5 C","dir":"down","type":"C","dyn":4.0942,"strong":false},{"name":"Minh Vo","cur":"4.5 C","dir":"down","type":"C","dyn":4.0942,"strong":false},{"name":"Todd Battison","cur":"4.5 C","dir":"down","type":"C","dyn":4.0945,"strong":false},{"name":"travis terry","cur":"4.5 C","dir":"down","type":"C","dyn":4.095,"strong":false},{"name":"Victor Betancourt","cur":"4.5 C","dir":"down","type":"C","dyn":4.0975,"strong":false},{"name":"Rahul M","cur":"4.5 C","dir":"down","type":"C","dyn":4.1,"strong":false},{"name":"Andy Stark","cur":"4.0 S","dir":"up","type":"S","dyn":4.2337,"strong":true},{"name":"Noah Neubauer","cur":"4.0 C","dir":"up","type":"C","dyn":4.2277,"strong":true},{"name":"Erik Tseng","cur":"4.0 C","dir":"up","type":"C","dyn":4.1825,"strong":true},{"name":"Guy Thyer","cur":"4.0 C","dir":"up","type":"C","dyn":4.1708,"strong":true},{"name":"Scott McConnell","cur":"4.0 C","dir":"up","type":"C","dyn":4.1674,"strong":true},{"name":"Samuel Yuen","cur":"4.0 C","dir":"up","type":"C","dyn":4.1459,"strong":true},{"name":"Michael Qi","cur":"4.0 C","dir":"up","type":"C","dyn":4.1303,"strong":true},{"name":"James Kim","cur":"4.0 C","dir":"up","type":"C","dyn":4.1254,"strong":true},{"name":"Jeffrey Allen","cur":"4.0 S","dir":"up","type":"S","dyn":4.113,"strong":true},{"name":"Jeff Blackburn","cur":"4.0 C","dir":"up","type":"C","dyn":4.1081,"strong":true},{"name":"Will Blanchard","cur":"4.0 C","dir":"up","type":"C","dyn":4.0882,"strong":true},{"name":"Seamus Miller","cur":"4.0 C","dir":"up","type":"C","dyn":4.0863,"strong":true},{"name":"Shaurya Bairaria","cur":"4.0 S","dir":"up","type":"S","dyn":4.0797,"strong":true},{"name":"William Wagner","cur":"4.0 C","dir":"up","type":"C","dyn":4.0775,"strong":true},{"name":"Oliver He","cur":"4.0 C","dir":"up","type":"C","dyn":4.074,"strong":true},{"name":"Ken Benoit","cur":"4.0 C","dir":"up","type":"C","dyn":4.0739,"strong":true},{"name":"Percy Pan","cur":"4.0 C","dir":"up","type":"C","dyn":4.0697,"strong":true},{"name":"Tyler Gardner","cur":"4.0 C","dir":"up","type":"C","dyn":4.0673,"strong":true},{"name":"Aaron Miller","cur":"4.0 C","dir":"up","type":"C","dyn":4.0659,"strong":true},{"name":"Nick LeClercq","cur":"4.0 S","dir":"up","type":"S","dyn":4.0598,"strong":true},{"name":"Rob Leinbach","cur":"4.0 C","dir":"up","type":"C","dyn":4.0541,"strong":true},{"name":"Sam Wang","cur":"4.0 C","dir":"up","type":"C","dyn":4.0496,"strong":true},{"name":"Bradley Hoefel","cur":"4.0 C","dir":"up","type":"C","dyn":4.0407,"strong":true},{"name":"Len Henzke","cur":"4.0 C","dir":"up","type":"C","dyn":4.0383,"strong":true},{"name":"Jacob Mann","cur":"4.0 C","dir":"up","type":"C","dyn":4.0379,"strong":true},{"name":"Ethan Chen","cur":"4.0 S","dir":"up","type":"S","dyn":4.0369,"strong":true},{"name":"Chris Higashi","cur":"4.0 C","dir":"up","type":"C","dyn":4.0334,"strong":true},{"name":"Daniel Snyder","cur":"4.0 C","dir":"up","type":"C","dyn":4.028,"strong":true},{"name":"Craig Collins","cur":"4.0 C","dir":"up","type":"C","dyn":4.0212,"strong":true},{"name":"John Hynes","cur":"4.0 C","dir":"up","type":"C","dyn":4.0185,"strong":true},{"name":"Lam Nguyen","cur":"4.0 C","dir":"up","type":"C","dyn":4.016,"strong":true},{"name":"Vamsi Surapaneni","cur":"4.0 S","dir":"up","type":"S","dyn":4.0132,"strong":true},{"name":"Jon Francis","cur":"4.0 S","dir":"up","type":"S","dyn":4.0131,"strong":true},{"name":"ATUL ALATKAR","cur":"4.0 C","dir":"up","type":"C","dyn":4.0125,"strong":true},{"name":"Michael Ahn","cur":"4.0 C","dir":"up","type":"C","dyn":4.0089,"strong":true},{"name":"Jacob Scalzo","cur":"4.0 C","dir":"up","type":"C","dyn":4.0082,"strong":true},{"name":"Paul Sullivan","cur":"4.0 C","dir":"up","type":"C","dyn":4.0082,"strong":true},{"name":"Matthew Ip","cur":"4.0 C","dir":"up","type":"C","dyn":4.006,"strong":true},{"name":"Gregory Chin","cur":"4.0 S","dir":"up","type":"S","dyn":4.005,"strong":true},{"name":"Jeffrey Nomi","cur":"4.0 C","dir":"up","type":"C","dyn":4.0034,"strong":true},{"name":"Nate Faubion","cur":"4.0 C","dir":"up","type":"C","dyn":4.0,"strong":true},{"name":"Mike Hoefel","cur":"4.0 C","dir":"up","type":"C","dyn":4.0,"strong":true},{"name":"Colin Kim","cur":"4.0 C","dir":"up","type":"C","dyn":4.0,"strong":true},{"name":"Teodor Nicola Antoniu","cur":"4.0 C","dir":"up","type":"C","dyn":4.0,"strong":true},{"name":"Jourdan Radloff","cur":"4.0 C","dir":"up","type":"C","dyn":4.0,"strong":true},{"name":"Heberto Rios","cur":"4.0 C","dir":"up","type":"C","dyn":4.0,"strong":true},{"name":"Matthew Schultz","cur":"4.0 C","dir":"up","type":"C","dyn":4.0,"strong":true},{"name":"Douglas Verdieck","cur":"4.0 C","dir":"up","type":"C","dyn":4.0,"strong":true},{"name":"Andres Armenta","cur":"4.0 S","dir":"up","type":"S","dyn":3.9982,"strong":false},{"name":"Kareem Kamel","cur":"4.0 C","dir":"up","type":"C","dyn":3.9973,"strong":false},{"name":"Mark Peterson","cur":"4.0 S","dir":"up","type":"S","dyn":3.9965,"strong":false},{"name":"Zachary Chalett","cur":"4.0 C","dir":"up","type":"C","dyn":3.9962,"strong":false},{"name":"Hans Martin Calle","cur":"4.0 C","dir":"up","type":"C","dyn":3.9945,"strong":false},{"name":"Anthony Auriemma","cur":"4.0 C","dir":"up","type":"C","dyn":3.993,"strong":false},{"name":"Nick Eitel","cur":"4.0 S","dir":"up","type":"S","dyn":3.9921,"strong":false},{"name":"Benjamin Chotzen","cur":"4.0 C","dir":"up","type":"C","dyn":3.9918,"strong":false},{"name":"Jonathan Newman","cur":"4.0 C","dir":"up","type":"C","dyn":3.9916,"strong":false},{"name":"William Hall","cur":"4.0 C","dir":"up","type":"C","dyn":3.9892,"strong":false},{"name":"Deepak Venkateswaran","cur":"4.0 C","dir":"up","type":"C","dyn":3.9892,"strong":false},{"name":"Tony Martin","cur":"4.0 C","dir":"up","type":"C","dyn":3.9852,"strong":false},{"name":"Leslie Eerkes","cur":"4.0 S","dir":"up","type":"S","dyn":3.985,"strong":false},{"name":"Leonardo Rubio","cur":"4.0 C","dir":"up","type":"C","dyn":3.9838,"strong":false},{"name":"Kosei Ohno","cur":"4.0 C","dir":"up","type":"C","dyn":3.9816,"strong":false},{"name":"Kevin Jacobson","cur":"4.0 C","dir":"up","type":"C","dyn":3.9802,"strong":false},{"name":"Desney Tan","cur":"4.0 C","dir":"up","type":"C","dyn":3.9792,"strong":false},{"name":"Andrew Bagherpour","cur":"4.0 C","dir":"up","type":"C","dyn":3.9776,"strong":false},{"name":"Anh Nguyen","cur":"4.0 C","dir":"up","type":"C","dyn":3.9774,"strong":false},{"name":"Raymond Lam","cur":"4.0 C","dir":"up","type":"C","dyn":3.9766,"strong":false},{"name":"Felix Schuler","cur":"4.0 C","dir":"up","type":"C","dyn":3.9744,"strong":false},{"name":"Carson Reed","cur":"4.0 C","dir":"up","type":"C","dyn":3.9722,"strong":false},{"name":"Kemp Chanthanalay","cur":"4.0 C","dir":"up","type":"C","dyn":3.9709,"strong":false},{"name":"Bruce Robertson","cur":"4.0 C","dir":"up","type":"C","dyn":3.9702,"strong":false},{"name":"Rodolfo Baba","cur":"4.0 C","dir":"up","type":"C","dyn":3.969,"strong":false},{"name":"Kirk Dawson","cur":"4.0 C","dir":"up","type":"C","dyn":3.9668,"strong":false},{"name":"Bruno Caiado","cur":"4.0 C","dir":"up","type":"C","dyn":3.966,"strong":false},{"name":"Eric Papamarcos","cur":"4.0 C","dir":"up","type":"C","dyn":3.9659,"strong":false},{"name":"John Vu","cur":"4.0 C","dir":"up","type":"C","dyn":3.963,"strong":false},{"name":"Michael Joung","cur":"4.0 C","dir":"up","type":"C","dyn":3.9614,"strong":false},{"name":"Donovan Dang","cur":"4.0 C","dir":"up","type":"C","dyn":3.9609,"strong":false},{"name":"Alexander Katz","cur":"4.0 C","dir":"up","type":"C","dyn":3.9577,"strong":false},{"name":"Christian Kevin Galang","cur":"4.0 C","dir":"up","type":"C","dyn":3.9557,"strong":false},{"name":"Cuong Ngo","cur":"4.0 C","dir":"up","type":"C","dyn":3.9556,"strong":false},{"name":"William Tong","cur":"4.0 C","dir":"up","type":"C","dyn":3.9546,"strong":false},{"name":"Quentin Cheung","cur":"4.0 C","dir":"up","type":"C","dyn":3.9529,"strong":false},{"name":"Raymond Lim","cur":"4.0 C","dir":"up","type":"C","dyn":3.9528,"strong":false},{"name":"Bryan Cossette","cur":"4.0 C","dir":"up","type":"C","dyn":3.9521,"strong":false},{"name":"Loren Callahan","cur":"4.0 C","dir":"up","type":"C","dyn":3.9515,"strong":false},{"name":"Scott Barneson","cur":"4.0 C","dir":"up","type":"C","dyn":3.9507,"strong":false},{"name":"Mick Horton","cur":"4.0 C","dir":"up","type":"C","dyn":3.9507,"strong":false}];
+const $ = s => document.querySelector(s);
+let state = {dir:"all", type:"all", strong:"all", q:"", sortK:null, sortDesc:false};
+
+function strongText(r){
+  if(r.dir==="down") return r.strong ? "below 4.00" : "4.00-4.10";
+  return r.strong ? "above 4.00" : "3.95-4.00";
+}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+
+function render(){
+  let rows = DATA.filter(r =>
+    (state.dir==="all"   || r.dir===state.dir) &&
+    (state.type==="all"  || r.type===state.type) &&
+    (state.strong==="all"|| r.strong) &&
+    (state.q==="" || r.name.toLowerCase().includes(state.q))
+  );
+  if(state.sortK){
+    const k=state.sortK, d=state.sortDesc?-1:1;
+    rows = rows.slice().sort((a,b)=>{
+      let x=a[k], y=b[k];
+      if(typeof x==="string"){x=x.toLowerCase();y=String(y).toLowerCase();}
+      return x<y?-1*d:x>y?1*d:0;
+    });
+  }
+  $("#rows").innerHTML = rows.map(r=>{
+    const star = r.strong ? ' <span class="star" title="across the 4.00 line">&#9733;</span>' : '';
+    const dirPill = r.dir==="down"
+      ? '<span class="pill down">&darr; down</span>'
+      : '<span class="pill up">&uarr; up</span>';
+    return '<tr class="'+r.dir+'">'+
+      '<td class="dyn">'+r.dyn.toFixed(4)+star+'</td>'+
+      '<td>'+esc(r.name)+'</td>'+
+      '<td>'+esc(r.cur)+'</td>'+
+      '<td><span class="type '+r.type+'">'+(r.type==="C"?"Computer":"Self")+'</span></td>'+
+      '<td>'+dirPill+'</td>'+
+      '<td><span class="zone '+(r.strong?'strong':'')+'">'+strongText(r)+'</span></td>'+
+    '</tr>';
+  }).join("");
+  $("#count").textContent = rows.length + " shown";
+  document.querySelectorAll("thead th").forEach(th=>{
+    th.classList.toggle("sorted", th.dataset.k===state.sortK);
+    th.classList.toggle("desc", th.dataset.k===state.sortK && state.sortDesc);
+  });
+}
+
+function wireSeg(id, key){
+  document.querySelectorAll("#"+id+" button").forEach(b=>b.addEventListener("click",()=>{
+    state[key]=b.dataset.v;
+    document.querySelectorAll("#"+id+" button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+    render();
+  }));
+}
+wireSeg("dir","dir"); wireSeg("type","type"); wireSeg("strong","strong");
+$("#q").addEventListener("input", e=>{state.q=e.target.value.trim().toLowerCase(); render();});
+document.querySelectorAll("thead th").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.k;
+  if(state.sortK===k){ state.sortDesc=!state.sortDesc; } else { state.sortK=k; state.sortDesc=(k==="dyn"||k==="strong"); }
+  render();
+}));
+(function(){
+  const btn=$("#theme"); let m=null; try{m=localStorage.getItem("bw_theme");}catch(e){}
+  if(m) document.documentElement.setAttribute("data-theme",m);
+  btn.addEventListener("click",()=>{
+    const cur=document.documentElement.getAttribute("data-theme");
+    const dark = cur ? cur==="dark" : matchMedia("(prefers-color-scheme:dark)").matches;
+    const next = dark?"light":"dark";
+    document.documentElement.setAttribute("data-theme",next);
+    try{localStorage.setItem("bw_theme",next);}catch(e){}
+  });
+})();
+render();
+</script>
+</body></html>
